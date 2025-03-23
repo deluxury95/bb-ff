@@ -69,7 +69,7 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173'], // Update this as needed
+  origin: ['http://localhost:5173'], // Update this as needed
     credentials: true,
 }));
 
@@ -101,6 +101,8 @@ main();
 
 // Serve static files if in production environment
 if (process.env.NODE_ENV === "production") {
+ 
+
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   app.get("*", (req, res) => {
