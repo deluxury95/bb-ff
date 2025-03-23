@@ -1,40 +1,57 @@
-import { app, server } from "./lib/socket.js";
-
-import authRoutes from "./routes/auth.route.js";
-import { connectDB } from "./lib/db.js";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import dotenv from "dotenv";
-import express from "express";
-import messageRoutes from "./routes/message.route.js";
-import path from "path";
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
-const PORT = process.env.PORT;
-const __dirname = path.resolve();
+const app = express();
+const port = process.env.PORT || 5000;
 
+// Middleware
 app.use(express.json());
-app.use(cookieParser());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
+app.use(cors({
+    origin: ['http://localhost:5173'],
     credentials: true,
-  })
-);
+}));
 
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
+// Routes
+const bookRoutes = require('../src/books/book.route.js');
+const orderRoutes = require('../src/orders/order.route.js');
+const userRoutes = require('../src/users/user.route.js');
+const adminRoutes = require('../src/stats/admin.stats.js');
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.use('/api/books', bookRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/api/admin', adminRoutes);
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+async function main() {
+  try {
+    await mongoose.connect(process.env.DB_URL);
+    app.use('/', (req, res) => {
+      res.send('Book Store Server is running!');
+    });
+
+    console.log('MongoDB connected successfully!');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+main();
+
+// Serve static files if in production environment
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, '/frontend/dist')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
   });
 }
 
-server.listen(PORT, () => {
-  console.log("server is running on PORT:" + PORT);
-  connectDB();
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
