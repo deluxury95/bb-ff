@@ -47,7 +47,7 @@ const Register = () => {
 
     return (
         <div className='h-[calc(100vh-120px)] flex justify-center items-center'>
-            <div className='w-full max-w-sm mx-auto bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4'>
+            <div className='w-full max-w-sm mx-auto bg-yellow-500 shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4'>
                 <h2 className='text-xl font-semibold mb-4 text-center text-gray-700'>Please Register</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
