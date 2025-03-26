@@ -8,10 +8,11 @@
 
 
 const getBaseUrl = () => {
-     return "https://backend-app-ecc8.onrender.com";
-}
-
-export default getBaseUrl;
-
+     const backendUrl = import.meta.env.VITE_BACKEND_URL || "https://backend-app-ecc8.onrender.com";
+     return backendUrl;
+ }
+ 
+ export default getBaseUrl;
+ 
 
 
