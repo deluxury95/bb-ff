@@ -9,7 +9,7 @@ require('dotenv').config()
 // middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://frontend-m-chi.vercel.app'],
     credentials: true
 }))
 
@@ -36,5 +36,3 @@ main().then(() => console.log("Mongodb connect successfully!")).catch(err => con
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
-
